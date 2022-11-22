@@ -19,6 +19,7 @@ The idea is very straight forward grab events, parse the content and do whatever
 
 If you have already setup your gcloud console and a project then you can simply run in the console to deploy
 
+```
 gcloud functions deploy misskey-webhook \
 --region us-west1 \
 --entry-point MkWebHook.Function \
@@ -26,3 +27,4 @@ gcloud functions deploy misskey-webhook \
 --trigger-http \
 --allow-unauthenticated \
 --security-level secure-always
+```
