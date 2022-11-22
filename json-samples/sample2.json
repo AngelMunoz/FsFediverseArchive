@@ -1,0 +1,65 @@
+{
+    "hookId": "97usrkf7t5",
+    "userId": "97t9twmzdm",
+    "eventId": "4ad940db-34f6-4f47-a202-8b5e19afc6c3",
+    "createdAt": 1669063110888,
+    "type": "reply",
+    "body": {
+        "note": {
+            "id": "97ute7yx2k",
+            "createdAt": "2022-11-21T20:38:30.873Z",
+            "userId": "97t9twmzdm",
+            "user": {
+                "id": "97t9twmzdm",
+                "name": "Angel Munoz",
+                "username": "angelmunoz",
+                "host": null,
+                "avatarUrl": "https://media.misskey.cloud/files/thumbnail-510acd08-8219-493b-9676-5752da4b7fa6.webp",
+                "avatarBlurhash": "ydLp,NkC?^njxFayM{_3of-:WBM|ayWB9aoLRPWBaxofkC-;f6s:WVRjt6t7t8juV@WBNGs:j[kBf6WBj[ofkBof%2ayayfRWCofj[",
+                "avatarColor": null,
+                "emojis": [],
+                "onlineStatus": "online",
+                "driveCapacityOverrideMb": null
+            },
+            "text": "Let's give it another shot, I don't like to write/deploy on the dark but I guess that's what you need to do when there are no docs available",
+            "cw": null,
+            "visibility": "public",
+            "renoteCount": 0,
+            "repliesCount": 0,
+            "reactions": {},
+            "emojis": [],
+            "fileIds": [],
+            "files": [],
+            "replyId": "97uswtu7v9",
+            "renoteId": null,
+            "reply": {
+                "id": "97uswtu7v9",
+                "createdAt": "2022-11-21T20:24:59.407Z",
+                "userId": "97t9twmzdm",
+                "user": {
+                    "id": "97t9twmzdm",
+                    "name": "Angel Munoz",
+                    "username": "angelmunoz",
+                    "host": null,
+                    "avatarUrl": "https://media.misskey.cloud/files/thumbnail-510acd08-8219-493b-9676-5752da4b7fa6.webp",
+                    "avatarBlurhash": "ydLp,NkC?^njxFayM{_3of-:WBM|ayWB9aoLRPWBaxofkC-;f6s:WVRjt6t7t8juV@WBNGs:j[kBf6WBj[ofkBof%2ayayfRWCofj[",
+                    "avatarColor": null,
+                    "emojis": [],
+                    "onlineStatus": "online",
+                    "driveCapacityOverrideMb": null
+                },
+                "text": "I did get something, but I'm not sure where is the \"secret phrase\" it must be in the headers but I didn't log those...",
+                "cw": null,
+                "visibility": "public",
+                "renoteCount": 0,
+                "repliesCount": 0,
+                "reactions": {},
+                "emojis": [],
+                "fileIds": [],
+                "files": [],
+                "replyId": "97ussk88ti",
+                "renoteId": null
+            }
+        }
+    }
+}
