@@ -7,7 +7,6 @@ open Microsoft.Extensions.Configuration
 open Microsoft.Extensions.Logging
 open Thoth.Json.Net
 open Google.Cloud.PubSub.V1
-open System.Threading.Tasks
 
 open MkLib
 open MkLib.Encoders
@@ -68,7 +67,7 @@ type Function(logger: ILogger<Function>, config: IConfiguration) =
           logger.LogInformation $"Published Message with id: {publishId}"
         | Error err -> logger.LogDebug err
 
-        return! context.Response.WriteAsync "Ok"
+        return! response.WriteAsync "Ok"
       | _ ->
         response.StatusCode <- 401
         return! response.WriteAsync "Not Authorized"
