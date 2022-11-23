@@ -100,7 +100,7 @@ module Encoders =
           "createdAt", Encode.datetime note.createdAt
           "userId", Encode.string note.userId
           "user", User.Encode note.user
-          "text", User.Encode note.user
+          "text", Encode.string note.text
           match note.cw with
           | Some cw -> "cw", Encode.string cw
           | None -> ()
