@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "MkLib", "MkLib\MkLib.fsproj", "{4D2C7DDC-E4CE-49A1-B629-2454F5A4F4F5}"
+EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "MkWebHook", "MkWebHook\MkWebHook.fsproj", "{D53F596A-01A1-4267-A3A2-3B52FCE9A99C}"
+EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "MkSaveNote", "MkSaveNote\MkSaveNote.fsproj", "{67EC5B50-81D6-42D1-8C8E-D548B8C0B187}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{4D2C7DDC-E4CE-49A1-B629-2454F5A4F4F5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4D2C7DDC-E4CE-49A1-B629-2454F5A4F4F5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4D2C7DDC-E4CE-49A1-B629-2454F5A4F4F5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4D2C7DDC-E4CE-49A1-B629-2454F5A4F4F5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D53F596A-01A1-4267-A3A2-3B52FCE9A99C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D53F596A-01A1-4267-A3A2-3B52FCE9A99C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D53F596A-01A1-4267-A3A2-3B52FCE9A99C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D53F596A-01A1-4267-A3A2-3B52FCE9A99C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{67EC5B50-81D6-42D1-8C8E-D548B8C0B187}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{67EC5B50-81D6-42D1-8C8E-D548B8C0B187}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{67EC5B50-81D6-42D1-8C8E-D548B8C0B187}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{67EC5B50-81D6-42D1-8C8E-D548B8C0B187}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal

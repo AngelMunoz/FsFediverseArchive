@@ -1,4 +1,4 @@
-module MkWebHook.Types
+namespace MkLib
 
 open System
 
@@ -31,6 +31,27 @@ type User = {
   driveCapacityOverrideMb: float option
 }
 
+[<Struct>]
+type FileProperties = { width: float; height: float }
+
+type File = {
+  id: string
+  createdAt: DateTime
+  name: string
+  ``type``: string
+  md5: string
+  size: float
+  isSensitive: bool
+  blurhash: string
+  properties: FileProperties
+  url: string
+  thumbnailUrl: string
+  comment: string option
+  folderId: string option
+  folder: string option
+  userId: string option
+}
+
 type Note = {
   id: string
   createdAt: DateTime
@@ -42,7 +63,9 @@ type Note = {
   renoteCount: int64
   repliesCount: int64
   emojis: Emoji array
+  reactions: Map<string, int64>
   fileIds: string array
+  files: File array
   replyId: string option
   renoteId: string option
   mentions: string array option
@@ -50,6 +73,7 @@ type Note = {
   uri: string option
   url: string option
 }
+
 
 type WebHookEvent = {
   hookId: string

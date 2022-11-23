@@ -1,0 +1,23 @@
+[
+    {
+        "id": "97vwpp2mix",
+        "createdAt": "2022-11-22T14:59:11.278Z",
+        "name": "2022-11-22 08-59-10 1.png",
+        "type": "image/png",
+        "md5": "5ef00c591ed92627555dd770b0dfd311",
+        "size": 32514,
+        "isSensitive": false,
+        "blurhash": "y39tJy=]M}ohn2o%R4.A$cWEf,nMf-jEE4V=t8o$s*XAofohs,f4bde,X9a#Mxo$RObdWAWBbdn#t8jDW?f5f5kXr;t8nhj[fRadWY",
+        "properties": {
+            "width": 381,
+            "height": 338
+        },
+        "url": "https://media.misskey.cloud/files/659ef080-cabb-4aa2-9bcf-3d8bfdf6be64.png",
+        "thumbnailUrl": "https://media.misskey.cloud/files/thumbnail-3b5ef5ec-bc1b-4cd1-8188-a5e4e178122d.webp",
+        "comment": null,
+        "folderId": null,
+        "folder": null,
+        "userId": null,
+        "user": null
+    }
+]

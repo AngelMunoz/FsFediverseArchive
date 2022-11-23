@@ -14,17 +14,3 @@ I plan to make a "cross-poster" from [misskey] to [twitter] since as far as I kn
 > it can federate content and is compatible with mastodon up to some extent (where the spec is respected by both parties)
 
 The idea is very straight forward grab events, parse the content and do whatever you want with it
-
-# Deploy
-
-If you have already setup your gcloud console and a project then you can simply run in the console to deploy
-
-```
-gcloud functions deploy misskey-webhook \
---region us-west1 \
---entry-point MkWebHook.Function \
---runtime dotnet6 \
---trigger-http \
---allow-unauthenticated \
---security-level secure-always
-```
