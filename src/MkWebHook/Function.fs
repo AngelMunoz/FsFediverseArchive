@@ -11,6 +11,7 @@ open Google.Cloud.PubSub.V1
 open MkLib
 open MkLib.Encoders
 open MkLib.Decoders
+open System.Threading.Tasks
 
 [<AutoOpen>]
 module Patterns =
@@ -27,14 +28,23 @@ module Patterns =
 
 [<RequireQualifiedAccess>]
 module Publish =
-  let Note (note) = task {
-    let topicName = TopicName("misskey-automations", "mk-publish-note")
-    let! publisher = PublisherClient.CreateAsync(topicName)
+  let Note (publisher: PublisherClient, note) = task {
     let message = (Note.Encode note).ToString()
     return! publisher.PublishAsync(message)
   }
 
 type Function(logger: ILogger<Function>, config: IConfiguration) =
+
+  let mutable publisher: PublisherClient option = None
+
+  let getPublisher (project: IConfigurationSection) =
+    publisher
+    |> Option.map (Task.FromResult)
+    |> Option.defaultWith (fun _ ->
+      PublisherClient.CreateAsync(TopicName(project.GetValue "Name", project.GetValue "Topic")))
+
+  let misskeyInfo = lazy (config.GetRequiredSection("MissKeyInfo"))
+  let project = lazy (config.GetRequiredSection("Project"))
 
   interface IHttpFunction with
     /// <summary>
@@ -43,10 +53,9 @@ type Function(logger: ILogger<Function>, config: IConfiguration) =
     /// <param name="context">The HTTP context, containing the request and the response.</param>
     /// <returns>A task representing the asynchronous operation.</returns>
     member _.HandleAsync context = task {
-      let misskeyInfo = config.GetRequiredSection("MissKeyInfo")
 
-      let validSecret = misskeyInfo.GetValue("Secret")
-      let validHost = misskeyInfo.GetValue("Host")
+      let validSecret = misskeyInfo.Value.GetValue("Secret")
+      let validHost = misskeyInfo.Value.GetValue("Host")
 
       let response = context.Response
 
@@ -61,9 +70,11 @@ type Function(logger: ILogger<Function>, config: IConfiguration) =
             $"Parsed Event correctly: {result.``type``} - {result.body.note.visibility}"
           )
 
-          logger.LogInformation($"{result.body.note.text[0..100]}...")
+          logger.LogInformation $"{result.body.note.text[0..100]}..."
 
-          let! publishId = Publish.Note result.body.note
+          let! publisher = getPublisher project.Value
+
+          let! publishId = Publish.Note(publisher, result.body.note)
           logger.LogInformation $"Published Message with id: {publishId}"
         | Error err -> logger.LogDebug err
 

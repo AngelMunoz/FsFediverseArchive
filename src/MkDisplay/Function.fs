@@ -42,7 +42,14 @@ module Router =
 
 type Function(logger: ILogger<Function>, config: IConfiguration) =
 
+  let project = lazy (config.GetRequiredSection "Project")
   let mutable db: FirestoreDb option = None
+
+  let getDatabase (project: IConfigurationSection) =
+    db
+    |> Option.map (Task.FromResult)
+    |> Option.defaultWith (fun _ -> project.GetValue "Name" |> FirestoreDb.CreateAsync)
+
 
   interface IHttpFunction with
     /// <summary>
@@ -53,21 +60,14 @@ type Function(logger: ILogger<Function>, config: IConfiguration) =
     member _.HandleAsync context = task {
       let request = context.Request
       let response = context.Response
-      let project = config.GetRequiredSection "Project"
-
-      let getDatabase () =
-        db
-        |> Option.map (Task.FromResult)
-        |> Option.defaultWith (fun _ -> project.GetValue "Name" |> FirestoreDb.CreateAsync)
 
       match Router.get request.Path with
       | None
       | Some Notes ->
         let pagination = Router.query request.QueryString.Value
+        let! db = getDatabase project.Value
 
-        let! db = getDatabase ()
-
-        let collection = project.GetValue("FsCollectionName") |> db.Collection
+        let collection = project.Value.GetValue "FsCollectionName" |> db.Collection
 
         let! notes =
           try
@@ -81,9 +81,9 @@ type Function(logger: ILogger<Function>, config: IConfiguration) =
         return! notes |> Render.Notes pagination |> response.WriteAsync
 
       | Some(Note note) ->
-        let! db = getDatabase ()
+        let! db = getDatabase project.Value
 
-        let collection = project.GetValue("FsCollectionName") |> db.Collection
+        let collection = project.Value.GetValue "FsCollectionName" |> db.Collection
 
         let! note =
           try

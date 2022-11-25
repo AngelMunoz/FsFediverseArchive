@@ -34,9 +34,7 @@ type NoteRecord() =
 [<RequireQualifiedAccess>]
 module NoteRecord =
 
-  let Save (cancel) (db: FirestoreDb) (noteRecord: NoteRecord) = task {
-    let collection = db.Collection("mk-notes")
-
+  let Save (noteRecord: NoteRecord, collection: CollectionReference, cancel) = task {
     let! docRef = collection.AddAsync(noteRecord, cancel)
     return docRef.Id
   }
