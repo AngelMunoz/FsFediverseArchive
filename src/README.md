@@ -13,6 +13,19 @@ gcloud functions deploy misskey-webhook \
 --set-build-env-vars=GOOGLE_BUILDABLE=MkWebHook
 ```
 
+## MkDisplay
+
+```
+gcloud functions deploy misskey-display \
+--gen2 \
+--region us-west1 \
+--entry-point MkDisplay.Function \
+--runtime dotnet6 \
+--trigger-http \
+--allow-unauthenticated \
+--set-build-env-vars=GOOGLE_BUILDABLE=MkDisplay
+```
+
 ## MkSaveNote
 
 ```
