@@ -1,5 +1,7 @@
 namespace MkDisplay.Views
 
+#nowarn "3391"
+
 open System
 open MkLib
 open MkDisplay.Types
@@ -212,7 +214,12 @@ details .mk-note { border: none; }
           | Some noteUrl -> Attr.href noteUrl
           | None -> ()
         ] [
-          Text.enc (createdAt.ToString("f"))
+          let date =
+            let date: DateTimeOffset = DateTime.SpecifyKind(createdAt, DateTimeKind.Local)
+            date.ToOffset(TimeSpan(-6, 0, 0))
+
+          Text.enc (date.ToString("f"))
+
           match noteUrl with
           | Some _ -> Icons.chevronRight.Value
           | None -> ()

@@ -46,8 +46,7 @@ module NoteRecord =
   open Thoth.Json.Net
   open Microsoft.Extensions.Logging
 
-  let note (logger: ILogger<_>, db: FirestoreDb) noteId = task {
-    let collection = db.Collection("mk-notes")
+  let note (logger: ILogger<_>, collection: CollectionReference) noteId = task {
     let! snapshot = collection.WhereEqualTo("NoteId", noteId).GetSnapshotAsync()
 
     return
@@ -68,8 +67,7 @@ module NoteRecord =
       |> Option.flatten
   }
 
-  let paginate (logger: ILogger<_>, db: FirestoreDb) pagination = task {
-    let collection = db.Collection("mk-notes")
+  let paginate (logger: ILogger<_>, collection: CollectionReference) pagination = task {
     let offset = pagination.limit * (pagination.page - 1)
 
     let! snapshot =

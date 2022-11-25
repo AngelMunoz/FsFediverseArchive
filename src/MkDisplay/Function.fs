@@ -13,6 +13,7 @@ open Google.Cloud.Firestore
 open MkDisplay.Types
 open MkDisplay.Firestore
 open MkDisplay.Views
+open Microsoft.Extensions.Configuration
 
 type Routes =
   | Notes
@@ -39,7 +40,7 @@ module Router =
       | None -> { page = 1; limit = 10 }
 
 
-type Function(logger: ILogger<Function>) =
+type Function(logger: ILogger<Function>, config: IConfiguration) =
 
   let mutable db: FirestoreDb option = None
 
@@ -52,21 +53,25 @@ type Function(logger: ILogger<Function>) =
     member _.HandleAsync context = task {
       let request = context.Request
       let response = context.Response
+      let project = config.GetRequiredSection "Project"
+
+      let getDatabase () =
+        db
+        |> Option.map (Task.FromResult)
+        |> Option.defaultWith (fun _ -> project.GetValue "Name" |> FirestoreDb.CreateAsync)
 
       match Router.get request.Path with
       | None
       | Some Notes ->
-        logger.LogInformation(request.Path)
         let pagination = Router.query request.QueryString.Value
 
-        let! db =
-          db
-          |> Option.map (Task.FromResult)
-          |> Option.defaultWith (fun _ -> FirestoreDb.CreateAsync("misskey-automations"))
+        let! db = getDatabase ()
+
+        let collection = project.GetValue("FsCollectionName") |> db.Collection
 
         let! notes =
           try
-            NoteRecord.paginate (logger, db) pagination
+            NoteRecord.paginate (logger, collection) pagination
           with ex ->
             logger.LogDebug($"Failed to retreive notes", ex)
             Task.FromResult(List.empty)
@@ -76,14 +81,13 @@ type Function(logger: ILogger<Function>) =
         return! notes |> Render.Notes pagination |> response.WriteAsync
 
       | Some(Note note) ->
-        let! db =
-          db
-          |> Option.map (Task.FromResult)
-          |> Option.defaultWith (fun _ -> FirestoreDb.CreateAsync("misskey-automations"))
+        let! db = getDatabase ()
+
+        let collection = project.GetValue("FsCollectionName") |> db.Collection
 
         let! note =
           try
-            NoteRecord.note (logger, db) note
+            NoteRecord.note (logger, collection) note
           with ex ->
             logger.LogDebug($"Failed to retreive notes", ex)
             Task.FromResult(None)
