@@ -142,11 +142,14 @@ details .mk-note { border: none; }
          display: flex;
          justify-content: space-between;
          background-color: transparent;
-         backdrop-filter: blur(10px);"
+         backdrop-filter: blur(10px);
+         padding: 0.5em;
+         margin: 0.5em;
+         font-weight: bold;"
     ] [
       Elem.section [] [
         Elem.p [] [
-          Elem.a [ Attr.href "https://misskey.cloud/@angelmunmoz" ] [ Text.raw "@angelmunoz" ]
+          Elem.a [ Attr.href "https://misskey.cloud/@angelmunoz" ] [ Text.raw "@angelmunoz" ]
           Text.raw " content in the fediverse"
         ]
       ]
