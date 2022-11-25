@@ -15,7 +15,7 @@
 
 This is a simple and small project to set up an endpoint for misskey webhooks every time I publish a note (toot/tweet) and I (or someone else) reply on my own notes.
 
-The idea is very Quite simple:
+The idea is quite simple:
 
 - Publish notes in misskey
 - The `MkWebHook` [function] endpoint gets hit in [google cloud platform]
