@@ -1,4 +1,4 @@
-[misskey]: https://https://github.com/misskey-dev/misskey
+[misskey]: https://github.com/misskey-dev/misskey
 [twitter]: https://twitter.com
 [activitypub]: https://activitypub.rocks/
 [google cloud platform]: https://cloud.google.com
