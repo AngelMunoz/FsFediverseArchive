@@ -73,10 +73,12 @@ type Function(logger: ILogger<Function>, config: IConfiguration) =
           logger.LogInformation $"{result.body.note.text[0..100]}..."
 
           let! publisher = getPublisher project.Value
-
           let! publishId = Publish.Note(publisher, result.body.note)
           logger.LogInformation $"Published Message with id: {publishId}"
-        | Error err -> logger.LogDebug err
+        | Error err ->
+          logger.LogWarning($"Unable to decode the note, {err}")
+          logger.LogWarning(content)
+
 
         return! response.WriteAsync "Ok"
       | _ ->

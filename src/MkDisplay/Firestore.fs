@@ -5,7 +5,8 @@ open Google.Cloud.Firestore
 
 open MkLib
 open MkLib.Decoders
-
+open MkLib.Decoders.V0
+open FsToolkit.ErrorHandling
 
 type GuidConverter() =
 
@@ -55,13 +56,21 @@ module NoteRecord =
       |> Option.map (fun doc -> doc.ConvertTo<NoteRecord>() |> Option.ofObj)
       |> Option.flatten
       |> Option.map (fun noteRecord ->
-        match Decode.fromString Note.Decoder noteRecord.Content with
+        let decodingResult =
+          Decode.fromString Note.Decoder noteRecord.Content
+          |> Result.map (fun value -> Current value)
+          |> Result.orElseWith (fun _ ->
+            Decode.fromString V0.Note.Decoder noteRecord.Content
+            |> Result.map (fun value -> V0 value))
+
+        match decodingResult with
         | Ok note -> Some note
         | Error err ->
           logger.LogWarning(
-            $"Failed to deserialize document FirestoreId:{noteRecord.Id} DocumentIds: {noteId} - {noteRecord.NoteId}",
-            err
+            $"Failed to deserialize document, {err} FirestoreId:{noteRecord.Id} DocumentIds: {noteId} - {noteRecord.NoteId}"
           )
+
+          logger.LogWarning(noteRecord.Content)
 
           None)
       |> Option.flatten
@@ -86,7 +95,13 @@ module NoteRecord =
 
         match record with
         | Some(record, content) ->
-          match Decode.fromString Note.Decoder content with
+          let decodingResult =
+            Decode.fromString Note.Decoder content
+            |> Result.map (fun value -> Current value)
+            |> Result.orElseWith (fun _ ->
+              Decode.fromString V0.Note.Decoder content |> Result.map (fun value -> V0 value))
+
+          match decodingResult with
           | Ok note -> note
           | Error err ->
             logger.LogWarning

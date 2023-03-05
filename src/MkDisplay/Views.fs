@@ -16,6 +16,8 @@ module Markdown =
   let toHtml (content: string) =
     Markdown.ToHtml(content, pipeline.Value)
 
+
+
 [<RequireQualifiedAccess>]
 module Icons =
   let repeat =
@@ -192,7 +194,7 @@ details .mk-note { border: none; }
 
   static member noteInfobar
     (
-      user: User,
+      user: UserVersion,
       createdAt: DateTime,
       ?noteUrl: string,
       ?reactions: Map<string, int64>
@@ -257,7 +259,7 @@ details .mk-note { border: none; }
       ]
     ]
 
-  static member reply(note: Note) =
+  static member reply(note: NoteVersion) =
     let markdown = Markdown.toHtml (note.text)
 
     Elem.details [] [
@@ -276,12 +278,22 @@ details .mk-note { border: none; }
       )
     ]
 
-  static member note(note: Note) =
-    let markdown = Markdown.toHtml (note.text)
+  static member note(note: NoteVersion) =
+    let text =
+      match note with
+      | V0 note -> note.text
+      | Current note -> note.text
+
+    let reply =
+      match note with
+      | V0 note -> note.reply |> Option.map V0
+      | Current note -> note.reply |> Option.map Current
+
+    let markdown = Markdown.toHtml (text)
 
     Elements.card (
       [
-        match note.reply with
+        match reply with
         | Some noteReply -> Elements.reply (noteReply)
         | None -> ()
         Elem.p [] [ Text.raw (markdown) ]
@@ -306,7 +318,7 @@ details .mk-note { border: none; }
 module Render =
   open type Elements
 
-  let Notes (pagination: Pagination) (notes: Note list) =
+  let Notes (pagination: Pagination) (notes: NoteVersion list) =
 
     layout (
       [
@@ -319,5 +331,5 @@ module Render =
     )
     |> renderHtml
 
-  let Note (note: Note) =
+  let Note (note: NoteVersion) =
     layout [ topbar (); Elem.main [] [ Elements.note note ] ] |> renderHtml

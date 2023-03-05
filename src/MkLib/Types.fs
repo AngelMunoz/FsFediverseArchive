@@ -17,6 +17,7 @@ type Instance = {
   themeColor: string
 }
 
+
 type User = {
   id: string
   name: string
@@ -24,11 +25,11 @@ type User = {
   host: string option
   avatarUrl: string option
   avatarBlurHash: string option
+  isBot: bool
+  isCat: bool
   avatarColor: string option
   instance: Instance option
-  emojis: Emoji array
   onlineStatus: string
-  driveCapacityOverrideMb: float option
 }
 
 [<Struct>]
@@ -62,7 +63,6 @@ type Note = {
   visibility: string
   renoteCount: int64
   repliesCount: int64
-  emojis: Emoji array
   reactions: Map<string, int64>
   fileIds: string array
   files: File array
@@ -72,6 +72,7 @@ type Note = {
   reply: Note option
   uri: string option
   url: string option
+  myReaction: string option
 }
 
 
@@ -83,3 +84,44 @@ type WebHookEvent = {
   ``type``: WebHookEventKind
   body: {| note: Note |}
 }
+
+
+
+module V0 =
+
+  type User = {
+    id: string
+    name: string
+    username: string
+    host: string option
+    avatarUrl: string option
+    avatarBlurHash: string option
+    avatarColor: string option
+    instance: Instance option
+    emojis: Emoji array
+    onlineStatus: string
+    driveCapacityOverrideMb: float option
+  }
+
+
+  type Note = {
+    id: string
+    createdAt: DateTime
+    userId: string
+    user: User
+    text: string
+    cw: string option
+    visibility: string
+    renoteCount: int64
+    repliesCount: int64
+    emojis: Emoji array
+    reactions: Map<string, int64>
+    fileIds: string array
+    files: File array
+    replyId: string option
+    renoteId: string option
+    mentions: string array option
+    reply: Note option
+    uri: string option
+    url: string option
+  }

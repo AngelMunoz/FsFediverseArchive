@@ -15,6 +15,7 @@
   <ItemGroup>
     <PackageReference Include="Elmish.UrlParser" Version="1.0.0-beta-2" />
     <PackageReference Include="Falco.Markup" Version="1.0.1" />
+    <PackageReference Include="FsToolkit.ErrorHandling" Version="4.4.0" />
     <PackageReference Include="Google.Cloud.Firestore" Version="3.0.0" />
     <PackageReference Include="Google.Cloud.Functions.Hosting" Version="2.0.0-beta01" />
     <PackageReference Include="Markdig" Version="0.30.4" />

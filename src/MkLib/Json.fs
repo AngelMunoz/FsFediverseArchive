@@ -83,12 +83,9 @@ module Encoders =
           match user.instance with
           | Some instance -> "instance", Instance.Encode instance
           | None -> ()
-          "emojis", user.emojis |> Array.map Emoji.Encode |> Encode.array
           "onlineStatus", Encode.string user.onlineStatus
-          match user.driveCapacityOverrideMb with
-          | Some driveCapacityOverrideMb ->
-            "driveCapacityOverrideMb", Encode.float driveCapacityOverrideMb
-          | None -> ()
+          "isBot", Encode.bool user.isBot
+          "isCat", Encode.bool user.isCat
         ]
 
   type Note with
@@ -107,7 +104,6 @@ module Encoders =
           "visibility", Encode.string note.visibility
           "renoteCount", Encode.int64 note.renoteCount
           "repliesCount", Encode.int64 note.repliesCount
-          "emojis", note.emojis |> Array.map Emoji.Encode |> Encode.array
           "reactions", note.reactions |> Map.map (fun _ v -> Encode.int64 v) |> Encode.dict
           "fileIds", note.fileIds |> Array.map Encode.string |> Encode.array
           "files", note.files |> Array.map File.Encode |> Encode.array
@@ -128,6 +124,9 @@ module Encoders =
           | None -> ()
           match note.url with
           | Some url -> "url", Encode.string url
+          | None -> ()
+          match note.myReaction with
+          | Some myReaction -> "myReaction", Encode.string myReaction
           | None -> ()
         ]
 
@@ -178,9 +177,9 @@ module Decoders =
         avatarUrl = get.Optional.Field "avatarUrl" Decode.string
         avatarBlurHash = get.Optional.Field "avatarBlurHash" Decode.string
         avatarColor = get.Optional.Field "avatarColor" Decode.string
-        emojis = get.Required.Field "emojis" (Decode.array Emoji.Decoder)
         onlineStatus = get.Required.Field "onlineStatus" Decode.string
-        driveCapacityOverrideMb = get.Optional.Field "driveCapacityOverrideMb" Decode.float
+        isBot = get.Required.Field "isBot" Decode.bool
+        isCat = get.Required.Field "isCat" Decode.bool
       })
 
   type FileProperties with
@@ -227,7 +226,6 @@ module Decoders =
         visibility = get.Required.Field "visibility" Decode.string
         renoteCount = get.Required.Field "renoteCount" Decode.int64
         repliesCount = get.Required.Field "repliesCount" Decode.int64
-        emojis = get.Required.Field "emojis" (Decode.array Emoji.Decoder)
         reactions = get.Required.Field "reactions" (Decode.dict Decode.int64)
         files = get.Required.Field "files" (Decode.array File.Decoder)
         fileIds = get.Required.Field "fileIds" (Decode.array Decode.string)
@@ -237,6 +235,7 @@ module Decoders =
         uri = get.Optional.Field "uri" Decode.string
         url = get.Optional.Field "url" Decode.string
         reply = get.Optional.Field "reply" Note.Decoder
+        myReaction = get.Optional.Field "myReaction" Decode.string
       })
 
 
@@ -256,3 +255,48 @@ module Decoders =
               note = get.Required.Field "note" Note.Decoder
             |}))
       })
+
+  module V0 =
+    open Encoders
+
+    type V0.User with
+
+      static member Decoder: Decoder<V0.User> =
+        Decode.object (fun get -> {
+          id = get.Required.Field "id" Decode.string
+          name = get.Required.Field "name" Decode.string
+          username = get.Required.Field "username" Decode.string
+          host = get.Optional.Field "host" Decode.string
+          instance = get.Optional.Field "instance" Instance.Decoder
+          avatarUrl = get.Optional.Field "avatarUrl" Decode.string
+          avatarBlurHash = get.Optional.Field "avatarBlurHash" Decode.string
+          avatarColor = get.Optional.Field "avatarColor" Decode.string
+          emojis = get.Required.Field "emojis" (Decode.array Emoji.Decoder)
+          onlineStatus = get.Required.Field "onlineStatus" Decode.string
+          driveCapacityOverrideMb = get.Optional.Field "driveCapacityOverrideMb" Decode.float
+        })
+
+    type V0.Note with
+
+      static member Decoder: Decoder<V0.Note> =
+        Decode.object (fun get -> {
+          id = get.Required.Field "id" Decode.string
+          createdAt = get.Required.Field "createdAt" Decode.datetimeLocal
+          userId = get.Required.Field "userId" Decode.string
+          user = get.Required.Field "user" V0.User.Decoder
+          text = get.Required.Field "text" Decode.string
+          cw = get.Optional.Field "cw" Decode.string
+          visibility = get.Required.Field "visibility" Decode.string
+          renoteCount = get.Required.Field "renoteCount" Decode.int64
+          repliesCount = get.Required.Field "repliesCount" Decode.int64
+          emojis = get.Required.Field "emojis" (Decode.array Emoji.Decoder)
+          reactions = get.Required.Field "reactions" (Decode.dict Decode.int64)
+          files = get.Required.Field "files" (Decode.array File.Decoder)
+          fileIds = get.Required.Field "fileIds" (Decode.array Decode.string)
+          replyId = get.Optional.Field "replyId" Decode.string
+          renoteId = get.Optional.Field "renoteId" Decode.string
+          mentions = get.Optional.Field "mentions" (Decode.array Decode.string)
+          uri = get.Optional.Field "uri" Decode.string
+          url = get.Optional.Field "url" Decode.string
+          reply = get.Optional.Field "reply" V0.Note.Decoder
+        })
