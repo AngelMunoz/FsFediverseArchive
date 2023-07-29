@@ -3,9 +3,10 @@ namespace MkDisplay.Views
 #nowarn "3391"
 
 open System
-open MkLib
-open MkDisplay.Types
 open Falco.Markup
+
+open MkLib
+open MkLib.Clients.Types
 
 module Markdown =
   open Markdig

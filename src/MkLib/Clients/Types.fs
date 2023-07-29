@@ -1,4 +1,4 @@
-namespace MkDisplay.Types
+namespace MkLib.Clients.Types
 
 open MkLib
 

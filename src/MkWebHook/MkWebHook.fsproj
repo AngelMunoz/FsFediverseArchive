@@ -10,8 +10,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Google.Cloud.Functions.Hosting" Version="2.0.0-beta01" />
-    <PackageReference Include="Google.Cloud.PubSub.V1" Version="3.2.0" />
+    <PackageReference Include="Google.Cloud.Functions.Hosting" Version="2.1.0" />
+    <PackageReference Include="Google.Cloud.PubSub.V1" Version="3.6.0" />
   </ItemGroup>
 
   <ItemGroup>

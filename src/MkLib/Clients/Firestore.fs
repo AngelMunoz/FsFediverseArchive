@@ -1,4 +1,4 @@
-namespace MkDisplay.Firestore
+namespace MkLib.Clients.Firestore
 
 open System
 open Google.Cloud.Firestore
@@ -42,7 +42,7 @@ type NoteRecord() =
 
 [<RequireQualifiedAccess>]
 module NoteRecord =
-  open MkDisplay.Types
+  open MkLib.Clients.Types
 
   open Thoth.Json.Net
   open Microsoft.Extensions.Logging
