@@ -476,3 +476,4 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 appsettings.Production.json
+api-description.Production.yml
