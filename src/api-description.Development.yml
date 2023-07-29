@@ -1,0 +1,98 @@
+swagger: "2.0"
+info:
+  title: API_ID API Gateway for FsFediverse functions
+  description: Get Tuna's Fediverse notes
+  version: "1.0.0"
+schemes:
+  - "https"
+x-google-management:
+  metrics:
+    - name: read-requests
+      displayName: Read requests
+      valueType: INT64
+      metricKind: DELTA
+  quota:
+    limits:
+      - name: read-requests-limit
+        metric: read-requests
+        unit: 1/min/{project}
+        values:
+          STANDARD: 100
+
+paths:
+  /:
+    get:
+      summary: "Gets an HTML response of fediverse notes"
+      operationId: SOME_ID
+      x-google-backend:
+        address: https://FUNCTION_HOST.cloudfunctions.net/FUNCTION_NAME
+      parameters:
+        - name: page
+          in: query
+          required: false
+          type: number
+        - name: limit
+          in: query
+          required: false
+          type: number
+      produces:
+        - text/html
+      responses:
+        200:
+          description: "Success."
+
+  /notes/{id}:
+    get:
+      summary: "Gets an HTML response of a fediverse note"
+      operationId: SOME_ID
+      x-google-backend:
+        address: https://FUNCTION_HOST.cloudfunctions.net/FUNCTION_NAME
+      parameters:
+        - name: id
+          in: path
+          required: true
+          type: string
+      produces:
+        - text/html
+      responses:
+        200:
+          description: "Success."
+  /api:
+    get:
+      summary: "Gets a JSON response of fediverse notes"
+      operationId: SOME_ID
+      x-google-backend:
+        address: https://FUNCTION_HOST.cloudfunctions.net/FUNCTION_NAME
+      parameters:
+        - name: page
+          in: query
+          required: false
+          type: number
+        - name: limit
+          in: query
+          required: false
+          type: number
+      produces:
+        - application/json
+      responses:
+        200:
+          description: "Success."
+
+  /api/notes/{id}:
+    get:
+      summary: "Gets an HTML response of a fediverse note"
+      operationId: SOME_ID
+      x-google-backend:
+        address: https://FUNCTION_HOST.cloudfunctions.net/FUNCTION_NAME
+      parameters:
+        - name: id
+          in: path
+          required: true
+          type: string
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      responses:
+        200:
+          description: "Success."
