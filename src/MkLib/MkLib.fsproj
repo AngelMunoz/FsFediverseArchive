@@ -15,7 +15,6 @@
   <ItemGroup>
     <PackageReference Include="Thoth.Json.Net" Version="11.0.0" />
     <PackageReference Include="Google.Cloud.Firestore" Version="3.3.0" />
-    <PackageReference Include="Elmish.UrlParser" Version="1.0.1" />
     <PackageReference Include="FsToolkit.ErrorHandling" Version="4.9.0" />
   </ItemGroup>
 
