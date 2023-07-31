@@ -37,10 +37,9 @@ type Function(logger: ILogger<Function>, config: IConfiguration) =
       let request = context.Request
       let response = context.Response
 
-      match Router.get request.Path with
-      | None
-      | Some Notes ->
-        let pagination = Router.query request.QueryString.Value
+      match Router.get request.Query with
+      | Notes pagination ->
+
         let! db = getDatabase project.Value
 
         let collection = project.Value.GetValue "FsCollectionName" |> db.Collection
@@ -56,7 +55,7 @@ type Function(logger: ILogger<Function>, config: IConfiguration) =
         response.StatusCode <- 200
         return! notes |> Render.Notes pagination |> response.WriteAsync
 
-      | Some(Note note) ->
+      | Note note ->
         let! db = getDatabase project.Value
 
         let collection = project.Value.GetValue "FsCollectionName" |> db.Collection

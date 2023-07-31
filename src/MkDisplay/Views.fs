@@ -48,6 +48,19 @@ module Icons =
         ] []
       ])
 
+  let chevronLeft =
+    lazy
+      (Elem.svg [
+        Attr.style "height: 24px; width: 24px"
+        Svg.Attr.viewBox "0 0 24 24"
+        Svg.Attr.xmlns "http://www.w3.org/2000/svg"
+      ] [
+        Svg.Elem.path [
+          Svg.Attr.fill "currentColor"
+          Svg.Attr.d "M15.41,16.58L10.83,12L15.41,7.41L14,6L8,12L14,18L15.41,16.58Z"
+        ] []
+      ])
+
   let reply =
     lazy
       (Elem.svg [
@@ -93,16 +106,19 @@ type Elements =
         Elem.style [] [
           Text.raw (
             css
-              """:root { --b-link: #ff8b00; --b-txt: #00ffdc; }
+              """:root {
+  --b-link: #ff8b00;
+  --b-txt: #00ffdc;
+  --card-bg: #2e3440b0;
+}
 body {
   background-image: url('https://media.misskey.cloud/files/816160f7-6887-43d8-afa1-12dd217e75e3.jpg');
   height: 100vh;
   display: flex;
   flex-direction: column;
-  color: 
 }
 .mk-note {
-  background-color: #2e344033;
+  background-color: var(--card-bg);
   -webkit-backdrop-filter: blur(20px);
   backdrop-filter: blur(20px);
   padding: 1.5em;
@@ -130,6 +146,14 @@ summary {
 }
 summary p { margin: 0; }
 details .mk-note { border: none; }
+
+@media (prefers-color-scheme: light) {
+  :root {
+    --b-txt: #00636d;
+    --card-bg: #bcd2ffb0;
+    --b-bg-1: #bcd2ffb0;
+  }
+}
 """
           )
         ]
@@ -146,7 +170,7 @@ details .mk-note { border: none; }
          top: 0;
          display: flex;
          justify-content: space-between;
-         background-color: transparent;
+         background-color: var(--card-bg);
          backdrop-filter: blur(10px);
          padding: 0.5em;
          margin: 0.5em;
@@ -162,9 +186,9 @@ details .mk-note { border: none; }
       | Some pagination ->
         Elem.section [ Attr.style "display: flex; justify-content: space-evenly" ] [
           if pagination.page > 1 then
-            Elem.a [ Attr.href $"/notes?page={pagination.page - 1}" ] [ Text.raw "Previous " ]
+            Elem.a [ Attr.href $"/?page={pagination.page - 1}" ] [ Icons.chevronLeft.Value ]
           Elem.p [] [ Text.rawf " Page: %i " pagination.page ]
-          Elem.a [ Attr.href $"/notes?page={pagination.page + 1}" ] [ Text.raw " Next" ]
+          Elem.a [ Attr.href $"/?page={pagination.page + 1}" ] [ Icons.chevronRight.Value ]
         ]
       | None ->
         Elem.section [ Attr.style "display: flex; justify-content: space-evenly" ] [
@@ -207,6 +231,7 @@ details .mk-note { border: none; }
           // reactions
           for KeyValue(reaction, count) in reactions do
             Elem.span [ Attr.style ("font-size: 1.2 em;") ] [ Text.enc reaction ]
+
             Elem.span [ Attr.style ("font-weight: bold;") ] [ Text.enc $"{count}" ]
         ]
       | None -> ()
@@ -219,6 +244,7 @@ details .mk-note { border: none; }
         ] [
           let date =
             let date: DateTimeOffset = DateTime.SpecifyKind(createdAt, DateTimeKind.Local)
+
             date.ToOffset(TimeSpan(-6, 0, 0))
 
           Text.enc (date.ToString("f"))
@@ -267,6 +293,9 @@ details .mk-note { border: none; }
       Elem.summary [] [ Text.raw ($"{markdown[0..50]}...") ]
       Elements.card (
         [ Text.raw (markdown) ],
+        header = [
+          Elem.a [ Attr.href $"/?note={note.id}" ] [ Text.enc $"@{note.text[0..10]}..." ]
+        ],
         cardAttributes = [ Attr.dataAttr "note-id" note.id ],
         footer = [
           Elements.noteInfobar (
@@ -300,6 +329,9 @@ details .mk-note { border: none; }
         Elem.p [] [ Text.raw (markdown) ]
       ],
       cardAttributes = [ Attr.dataAttr "note-id" note.id ],
+      header = [
+        Elem.a [ Attr.href $"/?note={note.id}" ] [ Text.enc $"{note.text[0..30]}..." ]
+      ],
       footer = [
         let noteUrl =
 
