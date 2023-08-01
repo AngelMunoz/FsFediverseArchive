@@ -3,6 +3,7 @@ namespace MkLib.Clients.Router
 open MkLib.Clients.Types
 open FsToolkit.ErrorHandling
 
+
 [<Struct>]
 type Route =
   | Notes of pagination: Pagination
@@ -23,31 +24,22 @@ type Route =
 
 [<RequireQualifiedAccess>]
 module Router =
+  open Microsoft.AspNetCore.Http
 
-  let inline private getKey
-    (container: ^Container when ^Container: (member TryGetValue: string * byref<obj> -> bool))
-    key
-    =
-    let mutable output = Unchecked.defaultof<obj>
+  let inline get (container: IQueryCollection) =
 
-    let parsed = container.TryGetValue(key, &output)
-
-    match parsed with
-    | true -> ValueSome(output.ToString())
-    | _ -> ValueNone
-
-
-  let inline get query =
     let page =
-      getKey query "page"
-      |> ValueOption.bind ValueOption.tryParse
+      match container.TryGetValue "page" with
+      | true, value -> ValueOption.tryParse value
+      | false, _ -> ValueNone
       |> ValueOption.defaultValue 1
 
     let limit =
-      getKey query "limit"
-      |> ValueOption.bind ValueOption.tryParse
+      match container.TryGetValue "page" with
+      | true, value -> ValueOption.tryParse value
+      | false, _ -> ValueNone
       |> ValueOption.defaultValue 10
 
-    match getKey query "note" with
-    | ValueSome value -> Note value
-    | ValueNone -> Notes { page = page; limit = limit }
+    match container.TryGetValue "page" with
+    | true, value -> Note value
+    | false, _ -> Notes { page = page; limit = limit }

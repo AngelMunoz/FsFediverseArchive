@@ -10,7 +10,6 @@
     <Compile Include="Json.fs" />
     <Compile Include="Clients/Types.fs" />
     <Compile Include="Clients/Firestore.fs" />
-    <Compile Include="Clients/Router.fs" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Thoth.Json.Net" Version="11.0.0" />

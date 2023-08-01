@@ -5,6 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Include="Router.fs" />
     <Compile Include="Views.fs" />
     <Compile Include="Function.fs" />
     <None Include="appsettings*.json" CopyToOutputDirectory="PreserveNewest" />
