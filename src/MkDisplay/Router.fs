@@ -26,7 +26,7 @@ type Route =
 module Router =
   open Microsoft.AspNetCore.Http
 
-  let inline get (container: IQueryCollection) =
+  let get (container: IQueryCollection) =
 
     let page =
       match container.TryGetValue "page" with
@@ -35,11 +35,11 @@ module Router =
       |> ValueOption.defaultValue 1
 
     let limit =
-      match container.TryGetValue "page" with
+      match container.TryGetValue "limit" with
       | true, value -> ValueOption.tryParse value
       | false, _ -> ValueNone
       |> ValueOption.defaultValue 10
 
-    match container.TryGetValue "page" with
+    match container.TryGetValue "note" with
     | true, value -> Note value
     | false, _ -> Notes { page = page; limit = limit }

@@ -18,13 +18,17 @@ open MkJsonify.Jsonify
 
 
 type Function(logger: ILogger<Function>, config: IConfiguration) =
-  let project = lazy (config.GetRequiredSection "Project")
+  let projectName = config.GetSection("Project")["Name"]
+
+  let collectionName = config.GetSection("Project")["FsCollectionName"]
   let mutable db: FirestoreDb option = None
 
-  let getDatabase (project: IConfigurationSection) =
+  let getDatabase () =
     db
     |> Option.map (Task.FromResult)
-    |> Option.defaultWith (fun _ -> project.GetValue "Name" |> FirestoreDb.CreateAsync)
+    |> Option.defaultWith (fun _ -> FirestoreDb.CreateAsync(projectName))
+
+  let getCollection (db: FirestoreDb) = db.Collection(collectionName)
 
   interface IHttpFunction with
     /// <summary>
@@ -38,9 +42,8 @@ type Function(logger: ILogger<Function>, config: IConfiguration) =
 
       match Router.get request.Query with
       | Notes pagination ->
-        let! db = getDatabase project.Value
-
-        let collection = project.Value.GetValue "FsCollectionName" |> db.Collection
+        let! db = getDatabase ()
+        let collection = getCollection db
 
         let! notes =
           try
@@ -55,9 +58,8 @@ type Function(logger: ILogger<Function>, config: IConfiguration) =
         return! response.WriteAsync(encoded.ToString())
 
       | Note note ->
-        let! db = getDatabase project.Value
-
-        let collection = project.Value.GetValue "FsCollectionName" |> db.Collection
+        let! db = getDatabase ()
+        let collection = getCollection db
 
         let! note =
           try
